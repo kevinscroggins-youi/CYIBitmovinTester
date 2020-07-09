@@ -216,6 +216,7 @@ yi_configure_asset_copying(PROJECT_TARGET ${PROJECT_NAME}
 # application bundle suitable for the target platform. Having a cmake 'Package' target
 # is optional only if the platform's CMake file implements the yi_configure_packaging_for_platform function.
 if(TIZEN_NACL)
+    list(APPEND YI_USER_TIZEN_JS_FILES "YiRemoteLogger.js")
     list(APPEND YI_USER_TIZEN_JS_FILES "bitmovinplayer.js")
     list(APPEND YI_USER_TIZEN_JS_FILES "bitmovinplayer-ui.js")
     list(APPEND YI_USER_TIZEN_JS_FILES "YiPlatformUtilities.js")

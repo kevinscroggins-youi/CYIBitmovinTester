@@ -10,6 +10,7 @@ set(SOURCE_TIZEN-NACL
     src/YiTizenNaClRemoteLoggerSink.cpp
     src/YiBitmovinVideoPlayer.cpp
     src/YiBitmovinVideoSurface.cpp
+    src/YiTizenNaClRemoteLoggerSink.cpp
 )
 
 set(HEADERS_TIZEN-NACL
@@ -17,6 +18,7 @@ set(HEADERS_TIZEN-NACL
     src/YiBitmovinVideoPlayer.h
     src/YiBitmovinVideoPlayerPriv.h
     src/YiBitmovinVideoSurface.h
+    src/YiTizenNaClRemoteLoggerSink.h
 )
 
 set (YI_PROJECT_SOURCE

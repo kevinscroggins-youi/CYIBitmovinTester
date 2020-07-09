@@ -41,6 +41,7 @@
 #    include <player/YiTizenNaClVideoPlayer.h>
 
 #    include "YiBitmovinVideoPlayer.h"
+#    include "YiTizenNaClRemoteLoggerSink.h"
 #endif
 
 #define LOG_TAG "PlayerTesterApp"
@@ -225,6 +226,9 @@ PlayerTesterApp::PlayerTesterApp()
     , m_RoutePicker()
 #endif
 {
+#if defined(YI_TIZEN_NACL)
+  CYILogger::AddSink(std::make_shared<CYITizenNaClRemoteLoggerSink>());
+#endif // YI_TIZEN_NACL
 }
 
 PlayerTesterApp::~PlayerTesterApp()
