@@ -39,6 +39,8 @@
 
 #if defined(YI_TIZEN_NACL)
 #    include <player/YiTizenNaClVideoPlayer.h>
+
+#    include "YiBitmovinVideoPlayer.h"
 #endif
 
 #define LOG_TAG "PlayerTesterApp"
@@ -266,7 +268,20 @@ bool PlayerTesterApp::UserInit()
     GetMasterAppSceneManager()->StageScene("Main");
 
     // we can't instansiate the player in the constructor because on Android the CYIActivity is not available yet
+#if defined(YI_TIZEN_NACL)
+    yi::rapidjson::Document playerConfiguration(yi::rapidjson::kObjectType);
+    yi::rapidjson::MemoryPoolAllocator<yi::rapidjson::CrtAllocator> &allocator = playerConfiguration.GetAllocator();
+    yi::rapidjson::Value apiKeyValue("", allocator);
+    yi::rapidjson::Value appIdValue("", allocator);
+    playerConfiguration.AddMember(yi::rapidjson::StringRef("apiKey"), apiKeyValue, allocator);
+    playerConfiguration.AddMember(yi::rapidjson::StringRef("appId"), appIdValue, allocator);
+#if YI_DEBUG
+    playerConfiguration.AddMember(yi::rapidjson::StringRef("verbose"), yi::rapidjson::Value(true), allocator);
+#endif
+    m_pPlayer = std::unique_ptr<CYIBitmovinVideoPlayer>(CYIBitmovinVideoPlayer::Create(std::move(playerConfiguration)));
+#else
     m_pPlayer = CYIDefaultVideoPlayerFactory::Create();
+#endif // YI_TIZEN_NACL
     m_pPlayer->Init();
     m_pPlayer->ErrorOccurred.Connect(*this, &PlayerTesterApp::ErrorOccured);
     m_pPlayer->Preparing.Connect(*this, &PlayerTesterApp::VideoPreparing);
@@ -1207,6 +1222,38 @@ void PlayerTesterApp::InitializeVideoSelector(CYISceneView *pMainComposition)
         temp.url = "https://akamai-axtest.akamaized.net/routes/lapd-v1-acceptance/www_c4/Manifest.m3u8";
         temp.format = CYIAbstractVideoPlayer::StreamingFormat::HLS;
         temp.isLive = true;
+        AppendUrlIfSupported(temp);
+    }
+
+    {
+        UrlAndFormat temp;
+        temp.name = "[S] DASH (Turner)";
+        temp.url = "https://d2rghg6apqy7xc.cloudfront.net/dvp/test_dash/005/unencrypted/montereypop_16_min_2265099.mpd";
+        temp.format = CYIAbstractVideoPlayer::StreamingFormat::DASH;
+        AppendUrlIfSupported(temp);
+    }
+
+    {
+        UrlAndFormat temp;
+        temp.name = "[S] BBB Dark Truths";
+        temp.url = "https://storage.googleapis.com/shaka-demo-assets/bbb-dark-truths-hls/hls.m3u8";
+        temp.format = CYIAbstractVideoPlayer::StreamingFormat::HLS;
+        AppendUrlIfSupported(temp);
+    }
+
+    {
+        UrlAndFormat temp;
+        temp.name = "[S] Angel One (WebVTT)";
+        temp.url = "https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd";
+        temp.format = CYIAbstractVideoPlayer::StreamingFormat::DASH;
+        AppendUrlIfSupported(temp);
+    }
+
+    {
+        UrlAndFormat temp;
+        temp.name = "[S] Angel One";
+        temp.url = "https://storage.googleapis.com/shaka-demo-assets/angel-one-hls/hls.m3u8";
+        temp.format = CYIAbstractVideoPlayer::StreamingFormat::HLS;
         AppendUrlIfSupported(temp);
     }
 

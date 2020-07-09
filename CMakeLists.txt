@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.7 FATAL_ERROR)
 
 # The name of the project. When building for Android, this is passed from Android Studio.
 if(NOT YI_PROJECT_NAME)
-    set(YI_PROJECT_NAME "PlayerTester")
+    set(YI_PROJECT_NAME "BitmovinTester")
 endif()
 
 # This is used solely for projects that are built within the You.i Engine repository and can be removed for commercial projects.
@@ -21,12 +21,12 @@ include(${YouiEngine_DIR}/cmake/Modules/YiUtility.cmake)
 
 # The package name used for the project.
 if(NOT YI_PACKAGE_NAME)
-    set(YI_PACKAGE_NAME "tv.youi.playertester")
+    set(YI_PACKAGE_NAME "tv.youi.bitmovintester")
 endif()
 
 # The name of the application displayed on the device.
 if(NOT YI_DISPLAY_NAME)
-    set(YI_DISPLAY_NAME "Player Tester")
+    set(YI_DISPLAY_NAME "Bitmovin Tester")
 endif()
 
 # The url scheme used to launch the app through deep linking on various platforms.
@@ -38,7 +38,7 @@ endif()
 
 set(YI_VERSION_NUMBER 1.0.0.0 CACHE STRING "Build version of the application. This is the version that will be displayed to the end user in the store.")
 set(YI_BUILD_NUMBER "ENG-unversioned" CACHE STRING "Release version number that needs to be incremented for each store submission. For Apple platforms, this is the CFBundleVersion. For Android, this is the Version Code.")
-set(YI_YOUI_ENGINE_VERSION 4.999.0 CACHE STRING "Version required for the You.i Engine.")
+set(YI_YOUI_ENGINE_VERSION 5.16.0 CACHE STRING "Version required for the You.i Engine.")
 set(YI_EXCLUDED_ASSET_FILE_EXTENSIONS ".log,.aep" CACHE STRING "Comma-delimited list of file extensions whose files should be omitted during asset copying.")
 set(YI_ENABLE_PLAYREADY_FOR_XBOX YES CACHE BOOL "Specifies that the application requires playback of PlayReady content. Off by default as the application must get approval through Microsoft to release an app with this configuration." FORCE)
 
@@ -214,7 +214,14 @@ yi_configure_asset_copying(PROJECT_TARGET ${PROJECT_NAME}
 
 # Because not every platform requires custom packaging functionality, which is creating a
 # application bundle suitable for the target platform. Having a cmake 'Package' target
-# is optional only if the platform's CMake file implements the yi_configure_packaging_for_platform function. 
+# is optional only if the platform's CMake file implements the yi_configure_packaging_for_platform function.
+if(TIZEN_NACL)
+    list(APPEND YI_USER_TIZEN_JS_FILES "bitmovinplayer.js")
+    list(APPEND YI_USER_TIZEN_JS_FILES "bitmovinplayer-ui.js")
+    list(APPEND YI_USER_TIZEN_JS_FILES "YiPlatformUtilities.js")
+    list(APPEND YI_USER_TIZEN_JS_FILES "YiBitmovinVideoPlayer.js")
+endif()
+
 include(Modules/${YI_PLATFORM_LOWER}/YiConfigurePackagingForPlatform OPTIONAL)
 if (COMMAND yi_configure_packaging_for_platform)
     include(Modules/YiGenerateUniqueTargetName)

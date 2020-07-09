@@ -6,6 +6,19 @@ set(HEADERS_IOS
     src/AirplayRoutePicker.h
 )
 
+set(SOURCE_TIZEN-NACL
+    src/YiTizenNaClRemoteLoggerSink.cpp
+    src/YiBitmovinVideoPlayer.cpp
+    src/YiBitmovinVideoSurface.cpp
+)
+
+set(HEADERS_TIZEN-NACL
+    src/YiTizenNaClRemoteLoggerSink.h
+    src/YiBitmovinVideoPlayer.h
+    src/YiBitmovinVideoPlayerPriv.h
+    src/YiBitmovinVideoSurface.h
+)
+
 set (YI_PROJECT_SOURCE
     src/AutomatedPlayerTesterApp.cpp
     src/IStreamPlanetFairPlayHandler.cpp
